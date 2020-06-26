@@ -3,13 +3,13 @@
     <form @submit.prevent="onSubmit" class="form__wrapper">
 
         <label class="form__label" for="new_id">
-            <input class="form__input" id="new_id"  type="text" v-model.trim="newItem.id">new ID:
+            <input class="form__input" id="new_id"  type="text" v-model.trim="newId">new ID:
         </label>
         <label class="form__label" for="new-name">
-            <input class="form__input" id="new-name"  type="text" v-model.trim="newItem.name">new NAME:
+            <input class="form__input" id="new-name"  type="text" v-model.trim="newName">new NAME:
         </label>
         <label class="form__label" for="new-text">
-            <input  class="form__input"   id="new-text"  type="text" v-model.trim="newItem.body">new TEXT:
+            <input  class="form__input"   id="new-text"  type="text" v-model.trim="newBody">new TEXT:
         </label>
         <v-btn
                 color="primary"
@@ -28,13 +28,26 @@
         data: () => ({
             newItem: [
                 {id: '', name: '', body: ''}
-            ]
+            ],
+            newId: '',
+            newName: '',
+            newBody: ''
         }),
         methods: {
           onSubmit()  {
+              if (this.newId && this.newName && this.newBody){
+                  this.newItem.id = this.newId;
+                  this.newItem.name = this.newName;
+                  this.newItem.body = this.newBody;
+                  this.$emit('add-row', this.newItem);
+                  this.newId = '';
+                  this.newName = '';
+                  this.newBody = '';
 
-              if (this.newItem.id){
-                  this.$emit('add-row', this.newItem)
+
+              } else {
+                  alert('Заполните, пожалуйста, все поля');
+                  this.users_data = this.users_data;
               }
           }
         }

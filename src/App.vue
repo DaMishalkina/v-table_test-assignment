@@ -31,8 +31,7 @@ export default {
       'get_users'
     ]),
     addRow(user){
-      console.log(user)
-      this.users.push(user)
+      this.users.push(user);
 
     }
   },
