@@ -15,6 +15,11 @@
                             <p class="header-container__item"> ID </p>
                             <img :src="require('../assets/unfold_more.svg')" class="header-container__item"  @click="sortByID">
 <!--                            <button class="rm header-container__item">&times</button>-->
+                            <label class="table-search__container" for="search-id">
+                                <input id="search-id" type="text" class="head-container__item table-search__input"
+                                       v-model.trim="inputSearchId">
+                                <v-icon small>fas fa-search</v-icon>
+                            </label>
                         </div>
                     </th>
 
@@ -23,6 +28,12 @@
                             <p class="header-container__item"> NAME </p>
                             <img :src="require('../assets/unfold_more.svg')" class="header-container__item" @click="sortByName">
 <!--                            <button class="rm header-container__item">&times</button>-->
+                            <label class="table-search__container" for="search-name">
+                                <input id="search-name" type="text" class="head-container__item table-search__input"
+                                       v-model.trim="inputSearchName">
+                                <v-icon small>fas fa-search</v-icon>
+                            </label>
+
                         </div>
                     </th>
                     <th class="v-table__header">
@@ -30,11 +41,16 @@
                             <p class="header-container__item"> TEXT </p>
                             <img :src="require('../assets/unfold_more.svg')" class="header-container__item" @click="sortByText">
 <!--                            <button class="rm header-container__item">&times</button>-->
+                            <label class="table-search__container" for="search-text">
+                                <input id="search-text" type="text" class="head-container__item table-search__input"
+                                       v-model.trim="inputSearchBody">
+                                <v-icon small>fas fa-search</v-icon>
+                            </label>
                         </div>
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody v-if="inputSearchBody==='' && inputSearchId==='' && inputSearchName===''">
                 <tr class="v-table__row"
                     v-for="row in paginatedItems">
                     <td class="v-table__column v-table__id">{{row.id}}</td>
@@ -42,11 +58,27 @@
                     <td class="v-table__column v-table__text">{{row.body}}</td>
                     <td><v-icon
                             small
-                            @click="deleteItem(row.id)"
+                            @click.prevent="deleteItem(row.id)"
                     >
                         mdi-delete
+
                     </v-icon></td>
                 </tr>
+            </tbody>
+            <tbody v-else>
+            <tr class="v-table__row"
+                v-for="row in filteredItems">
+                <td class="v-table__column v-table__id">{{row.id}}</td>
+                <td class="v-table__column v-table__name">{{row.name}}</td>
+                <td class="v-table__column v-table__text">{{row.body}}</td>
+                <td><v-icon
+                        small
+                        @click.prevent="deleteItem(row.id)"
+                >
+                    mdi-delete
+
+                </v-icon></td>
+            </tr>
             </tbody>
         </table>
         <div class="v-table__pagintation">
@@ -92,6 +124,9 @@
 
     export default {
         data: () => ({
+            inputSearchId: '',
+            inputSearchName: '',
+            inputSearchBody: '',
             headers: [
                 {text: 'ID', align: 'center', value: 'id'},
                 {text: 'NAME', align: 'center', value: 'name'},
@@ -136,8 +171,24 @@
             paginatedItems () {
                 let from = (this.pageNumber-1)*this.usersPerPage;
                 let to =from + this.usersPerPage;
-                return this.users_data.slice(from,to);
+                return this.users_data.slice(from,to)
             },
+
+            filteredItems (){
+                if (this.inputSearchId !==''){
+                    return this.users_data.filter(row => row.id == this.inputSearchId)
+                } if (this.inputSearchName !== ''){
+                    return this.users_data.filter(row => {
+                        return row.name.toLowerCase().includes(this.inputSearchName.toLowerCase())
+                    })
+                } if (this.inputSearchBody !== ''){
+                    return this.users_data.filter(row => {
+                        return row.body.toLowerCase().includes(this.inputSearchBody.toLowerCase())
+                    })
+                }
+
+            }
+
         }
     }
 </script>
@@ -159,9 +210,19 @@
        margin-top: 20px;
    }
    .v-table__header-container{
-      cursor: pointer;
+       cursor: pointer;
        display: flex;
        justify-content: center;
+       flex-direction: column;
+   }
+   .table-search__container {
+       display: flex;
+       justify-content: center;
+   }
+   .table-search__input {
+       margin-right: 10px;
+       border: solid 1px #676767;
+       border-radius: 15px;
    }
     .v-table__column {
         padding: 8px 16px;
