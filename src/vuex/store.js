@@ -10,7 +10,7 @@ const store= new Vuex.Store({
     },
     actions:{
         get_users({commit}){
-            return axios('https://jsonplaceholder.typicode.com/comments', {
+            return axios('http://localhost:3000/users', {
                 method: 'GET'
             })
                 .then((response) => {

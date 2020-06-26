@@ -1,23 +1,36 @@
 <template>
-
     <div class="v-table__wrapper">
+
         <table class="v-table">
             <thead class="v-table__heading">
                 <tr  class="v-table__headers">
-                    <th class="v-table__header" @click="sortByID">
-                        ID
-                        <img :src="require('../assets/unfold_more.svg')"
-                        >
+<!--                    <th class="v-table__header"  v-for="header in headers">-->
+<!--                        {{header.text}}-->
+<!--                        <button class="rm header-container__item"-->
+<!--                        @click="removeColumn">-->
+<!--                            &times</button>-->
+
+                    <th>
+                        <div class="v-table__header-container header-container">
+                            <p class="header-container__item"> ID </p>
+                            <img :src="require('../assets/unfold_more.svg')" class="header-container__item"  @click="sortByID">
+<!--                            <button class="rm header-container__item">&times</button>-->
+                        </div>
                     </th>
-                    <th class="v-table__header" @click="sortByName">
-                        NAME
-                        <img :src="require('../assets/unfold_more.svg')"
-                        >
+
+                    <th class="v-table__header">
+                        <div class="v-table__header-container header-container">
+                            <p class="header-container__item"> NAME </p>
+                            <img :src="require('../assets/unfold_more.svg')" class="header-container__item" @click="sortByName">
+<!--                            <button class="rm header-container__item">&times</button>-->
+                        </div>
                     </th>
-                    <th class="v-table__header" @click="sortByText">
-                        TEXT
-                        <img :src="require('../assets/unfold_more.svg')"
-                        >
+                    <th class="v-table__header">
+                        <div class="v-table__header-container header-container">
+                            <p class="header-container__item"> TEXT </p>
+                            <img :src="require('../assets/unfold_more.svg')" class="header-container__item" @click="sortByText">
+<!--                            <button class="rm header-container__item">&times</button>-->
+                        </div>
                     </th>
                 </tr>
             </thead>
@@ -27,6 +40,12 @@
                     <td class="v-table__column v-table__id">{{row.id}}</td>
                     <td class="v-table__column v-table__name">{{row.name}}</td>
                     <td class="v-table__column v-table__text">{{row.body}}</td>
+                    <td><v-icon
+                            small
+                            @click="deleteItem(row.id)"
+                    >
+                        mdi-delete
+                    </v-icon></td>
                 </tr>
             </tbody>
         </table>
@@ -68,7 +87,9 @@
 
 </template>
 
+
 <script>
+
     export default {
         data: () => ({
             headers: [
@@ -89,6 +110,12 @@
             }
         },
         methods: {
+            deleteItem(id){
+                console.log(id);
+                this.users_data = this.users_data.filter(t => t.id !== id);
+
+            },
+
             pageClick(page){
                 this.pageNumber = page;
             },
@@ -110,7 +137,7 @@
                 let from = (this.pageNumber-1)*this.usersPerPage;
                 let to =from + this.usersPerPage;
                 return this.users_data.slice(from,to);
-            }
+            },
         }
     }
 </script>
@@ -126,8 +153,15 @@
    /*     flex-basis: 33%;*/
    /*     padding: 8px 16px;*/
    /* }*/
-   .v-table__header{
+
+
+   .v-table {
+       margin-top: 20px;
+   }
+   .v-table__header-container{
       cursor: pointer;
+       display: flex;
+       justify-content: center;
    }
     .v-table__column {
         padding: 8px 16px;
@@ -157,5 +191,6 @@
         cursor: pointer;
         color: #fff;
     }
+
 
 </style>
