@@ -31,7 +31,8 @@ export default {
       'get_users'
     ]),
     addRow(user){
-      this.users.push(user);
+      let toAdd = {id: user.id, name: user.name, body: user.body}
+      this.users.push(toAdd);
 
     }
   },

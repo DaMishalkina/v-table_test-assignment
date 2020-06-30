@@ -26,9 +26,9 @@
 <script>
     export default {
         data: () => ({
-            newItem: [
+            newItem:
                 {id: '', name: '', body: ''}
-            ],
+            ,
             newId: '',
             newName: '',
             newBody: ''
